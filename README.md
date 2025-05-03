@@ -282,16 +282,31 @@ When creating a new project from this template:
 
 ```bash
 # Clone the template for a new project
-git clone https://github.com/yourusername/turbo-t3-sassy.git my-new-project
+git clone https://github.com/knamnguyen/turbo-t3-sassy.git my-new-project
 
 # Change remote to your new project repo
 cd my-new-project
+
+
+# Install GitHub CLI if not already installed
+brew install gh
+
+# Authenticate with GitHub CLI
+gh auth login
+
+# Create a new private repository on GitHub
+gh repo create my-new-project --private --confirm
+
+# Remove the template origin and set your new repository as origin
 git remote remove origin
 git remote add origin https://github.com/yourusername/my-new-project.git
 git push -u origin main
 
 # Add the template as another remote for future synchronization
-git remote add template https://github.com/yourusername/turbo-t3-sassy.git
+git remote add template https://github.com/knamnguyen/turbo-t3-sassy.git
+
+#check all the currently connected remote repo
+git remote -v
 ```
 
 ### Syncing from Project to Template
