@@ -10,13 +10,17 @@
  *   # or if added to root package.json scripts
  *   pnpm sync-repos
  */
-import { exec } from "child_process";
-import { promisify } from "util";
+import { exec, execSync } from "child_process";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import chalk from "chalk";
 import { Command } from "commander";
 import inquirer from "inquirer";
 
-const execAsync = promisify(exec);
+// Get the script directory and find the repository root
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const repoRoot = path.join(__dirname, "../..");
 
 const program = new Command();
 
@@ -29,6 +33,9 @@ program.parse();
 
 // Main function
 async function main() {
+  // Store original directory to return to it later
+  const originalDir = process.cwd();
+
   try {
     console.log(chalk.blue.bold("Repository Synchronization Tool"));
     console.log(
@@ -36,6 +43,10 @@ async function main() {
         "Automates syncing between template and project repositories\n",
       ),
     );
+
+    // Ensure we're running from the repository root
+    process.chdir(repoRoot);
+    console.log(chalk.dim(`Working directory: ${process.cwd()}`));
 
     // Step 1: Determine if we're in a template or project repository
     const { repoType } = await inquirer.prompt<{
@@ -130,6 +141,8 @@ async function main() {
 
     if (!confirmSync) {
       console.log(chalk.yellow("Sync operation canceled."));
+      // Return to the original directory before exiting
+      process.chdir(originalDir);
       process.exit(0);
     }
 
@@ -138,30 +151,50 @@ async function main() {
       repoType === "template" ? "update-from-project" : "update-from-template";
 
     console.log(chalk.blue(`\nStep 1: Checking out main branch...`));
-    await runCommand("git checkout main");
+    execSync("git checkout main", { stdio: "inherit" });
 
     console.log(chalk.blue(`\nStep 2: Creating branch ${branchName}...`));
-    await runCommand(`git checkout -b ${branchName}`);
+    execSync(`git checkout -b ${branchName}`, { stdio: "inherit" });
 
     console.log(chalk.blue(`\nStep 3: Fetching from ${remoteName}...`));
-    await runCommand(`git fetch ${remoteName}`);
+    execSync(`git fetch ${remoteName}`, { stdio: "inherit" });
+
+    console.log("fetching completed");
 
     // Step 7: Checkout files from remote
     console.log(
       chalk.blue(`\nStep 4: Checking out specified files from remote...`),
     );
 
-    const remoteRef =
-      repoType === "template" ? `${remoteName}/main` : `${remoteName}/main`;
+    const remoteRef = `${remoteName}/main`;
 
     for (const path of paths) {
-      console.log(chalk.dim(`Checking out: ${path}`));
-      await runCommand(`git checkout ${remoteRef} -- ${path}`);
+      try {
+        console.log(chalk.dim(`Checking out: ${path}`));
+
+        // Quote the path to handle spaces properly in git commands
+        // This ensures paths like "z - notes.md" are handled as a single argument
+        const quotedPath = `"${path}"`;
+
+        console.log(
+          chalk.dim(`Command: git checkout ${remoteRef} -- ${quotedPath}`),
+        );
+        execSync(`git checkout ${remoteRef} -- ${quotedPath}`, {
+          stdio: "inherit",
+        });
+      } catch (error) {
+        const checkoutError = error as Error;
+        console.error(
+          chalk.red(`Error checking out ${path}: ${checkoutError.message}`),
+        );
+
+        throw new Error(`Sync aborted by user after error on ${path}`);
+      }
     }
 
     // Step 8: Show diff and confirm
     console.log(chalk.blue(`\nStep 5: Showing changes (git diff --staged)...`));
-    await runCommand("git diff --staged");
+    execSync("git diff --staged", { stdio: "inherit" });
 
     const { confirmChanges } = await inquirer.prompt<{
       confirmChanges: boolean;
@@ -182,13 +215,15 @@ async function main() {
             branchName,
         ),
       );
+      // Return to the original directory before exiting
+      process.chdir(originalDir);
       process.exit(0);
     }
 
     // Step 9: Commit changes
     console.log(chalk.blue(`\nStep 6: Committing changes...`));
-    await runCommand("git add .");
-    await runCommand(`git commit -m "${commitMessage}"`);
+    execSync("git add .", { stdio: "inherit" });
+    execSync(`git commit -m "${commitMessage}"`, { stdio: "inherit" });
 
     // Step 10: Merge to main branch (with warning)
     console.log(chalk.yellow.bold(`\n⚠️  MANUAL STEP REQUIRED ⚠️`));
@@ -214,7 +249,17 @@ async function main() {
     console.log(
       chalk.green.bold("\n✅ Sync preparation completed successfully!"),
     );
+
+    // Return to the original directory at the end of the script
+    process.chdir(originalDir);
   } catch (error) {
+    // Make sure we return to the original directory even if there's an error
+    try {
+      process.chdir(originalDir);
+    } catch (cdError) {
+      // Ignore errors from changing directory back
+    }
+
     console.error(
       chalk.red(
         `\n❌ Error: ${error instanceof Error ? error.message : String(error)}`,
@@ -222,27 +267,6 @@ async function main() {
     );
     process.exit(1);
   }
-}
-
-/**
- * Run a shell command and stream its output to the console
- */
-async function runCommand(command: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const childProcess = exec(command);
-
-    // Forward stdout and stderr to the console
-    childProcess.stdout?.pipe(process.stdout);
-    childProcess.stderr?.pipe(process.stderr);
-
-    childProcess.on("close", (code) => {
-      if (code === 0) {
-        resolve();
-      } else {
-        reject(new Error(`Command failed with exit code ${code}: ${command}`));
-      }
-    });
-  });
 }
 
 /**
@@ -277,7 +301,18 @@ function parsePaths(input: string): string[] {
     paths.push(currentPath);
   }
 
-  return paths.map((p) => p.trim()).filter((p) => p);
+  // Process paths: trim and handle special cases
+  return paths
+    .map((p) => {
+      p = p.trim();
+      // Replace './' with '.' to handle current directory properly
+      if (p === "./") return ".";
+      // Remove leading './' prefix from paths for git checkout compatibility
+      if (p.startsWith("./")) return p.substring(2);
+      // Remove trailing slash from directory paths to avoid git checkout issues
+      return p.endsWith("/") ? p.slice(0, -1) : p;
+    })
+    .filter((p) => p);
 }
 
 main().catch((err) => {
