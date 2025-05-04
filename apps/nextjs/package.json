@@ -14,12 +14,12 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.12.5",
     "@sassy/api": "workspace:*",
     "@sassy/db": "workspace:*",
     "@sassy/stripe": "workspace:*",
     "@sassy/ui": "workspace:*",
     "@sassy/validators": "workspace:*",
-    "@clerk/nextjs": "^6.12.5",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
@@ -34,11 +34,11 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@prisma/nextjs-monorepo-workaround-plugin": "^6.5.0",
     "@sassy/eslint-config": "workspace:*",
     "@sassy/prettier-config": "workspace:*",
     "@sassy/tailwind-config": "workspace:*",
     "@sassy/tsconfig": "workspace:*",
-    "@prisma/nextjs-monorepo-workaround-plugin": "^6.5.0",
     "@types/node": "^22.10.10",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",

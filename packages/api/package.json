@@ -19,10 +19,10 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.12.5",
     "@sassy/db": "workspace:*",
     "@sassy/stripe": "workspace:*",
     "@sassy/validators": "workspace:*",
-    "@clerk/nextjs": "^6.12.5",
     "@trpc/server": "catalog:",
     "superjson": "2.2.2",
     "zod": "catalog:"
