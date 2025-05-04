@@ -31,6 +31,49 @@ program
 
 program.parse();
 
+/**
+ * Get the current git branch name
+ */
+function getCurrentBranch(): string {
+  try {
+    return execSync("git branch --show-current", { encoding: "utf8" }).trim();
+  } catch (error) {
+    console.error(chalk.red("Failed to get current branch"));
+    throw error;
+  }
+}
+
+/**
+ * Check if a git branch exists
+ */
+function branchExists(branchName: string): boolean {
+  try {
+    const branches = execSync("git branch", { encoding: "utf8" });
+    // Look for the branch name prefixed with a space or an asterisk (current branch)
+    return new RegExp(`[\\s\\*]${branchName}\\b`).test(branches);
+  } catch (error) {
+    console.error(
+      chalk.red(`Failed to check if branch '${branchName}' exists`),
+    );
+    return false;
+  }
+}
+
+/**
+ * Delete a git branch if it exists
+ */
+function deleteBranchIfExists(branchName: string): void {
+  if (branchExists(branchName)) {
+    try {
+      console.log(chalk.yellow(`Deleting existing branch '${branchName}'...`));
+      execSync(`git branch -D ${branchName}`, { stdio: "inherit" });
+    } catch (error) {
+      console.error(chalk.red(`Failed to delete branch '${branchName}'`));
+      throw error;
+    }
+  }
+}
+
 // Main function
 async function main() {
   // Store original directory to return to it later
@@ -47,6 +90,10 @@ async function main() {
     // Ensure we're running from the repository root
     process.chdir(repoRoot);
     console.log(chalk.dim(`Working directory: ${process.cwd()}`));
+
+    // Save the original branch name
+    const originalBranch = getCurrentBranch();
+    console.log(chalk.dim(`Current branch: ${originalBranch}`));
 
     // Step 1: Determine if we're in a template or project repository
     const { repoType } = await inquirer.prompt<{
@@ -146,12 +193,15 @@ async function main() {
       process.exit(0);
     }
 
-    // Step 6: Create branch and fetch remote
+    // Step 6: First switch to main branch regardless of current branch
+    console.log(chalk.blue(`\nStep 1: Switching to main branch...`));
+    execSync("git checkout main", { stdio: "inherit" });
+
     const branchName =
       repoType === "template" ? "update-from-project" : "update-from-template";
 
-    console.log(chalk.blue(`\nStep 1: Checking out main branch...`));
-    execSync("git checkout main", { stdio: "inherit" });
+    // Delete sync branch if it already exists from previous syncs
+    deleteBranchIfExists(branchName);
 
     console.log(chalk.blue(`\nStep 2: Creating branch ${branchName}...`));
     execSync(`git checkout -b ${branchName}`, { stdio: "inherit" });
@@ -209,12 +259,11 @@ async function main() {
 
     if (!confirmChanges) {
       console.log(chalk.yellow("Changes rejected. Aborting sync."));
-      console.log(
-        chalk.dim(
-          "To clean up, you can run: git checkout main && git branch -D " +
-            branchName,
-        ),
-      );
+      console.log(chalk.dim(`Returning to main branch...`));
+      execSync("git checkout main", { stdio: "inherit" });
+      console.log(chalk.dim(`Cleaning up: deleting ${branchName} branch`));
+      deleteBranchIfExists(branchName);
+
       // Return to the original directory before exiting
       process.chdir(originalDir);
       process.exit(0);
@@ -225,30 +274,107 @@ async function main() {
     execSync("git add .", { stdio: "inherit" });
     execSync(`git commit -m "${commitMessage}"`, { stdio: "inherit" });
 
-    // Step 10: Merge to main branch (with warning)
-    console.log(chalk.yellow.bold(`\n⚠️  MANUAL STEP REQUIRED ⚠️`));
-    console.log(
-      chalk.yellow(
-        `The changes have been committed to the "${branchName}" branch.`,
-      ),
-    );
-    console.log(
-      chalk.yellow(
-        `To complete the sync, you need to manually merge this branch to main:`,
-      ),
-    );
-    console.log(chalk.dim(`\ngit checkout main`));
-    console.log(chalk.dim(`git merge ${branchName}`));
-    console.log(chalk.dim(`# Resolve any conflicts if needed`));
-    console.log(
-      chalk.dim(
-        `git branch -d ${branchName} # Optional: delete the branch after merging`,
-      ),
-    );
+    // Step 10: Auto merge to main branch
+    console.log(chalk.blue(`\nStep 7: Merging changes to main branch...`));
 
-    console.log(
-      chalk.green.bold("\n✅ Sync preparation completed successfully!"),
-    );
+    // Confirm the merge
+    const { confirmMerge } = await inquirer.prompt<{ confirmMerge: boolean }>([
+      {
+        type: "confirm",
+        name: "confirmMerge",
+        message: `Automatically merge ${branchName} into main?`,
+        default: true,
+      },
+    ]);
+
+    if (!confirmMerge) {
+      console.log(
+        chalk.yellow(
+          `Merge cancelled. Branch ${branchName} was created with your changes.`,
+        ),
+      );
+      console.log(
+        chalk.yellow(
+          `You can manually merge with: git checkout main && git merge ${branchName}`,
+        ),
+      );
+
+      // Return to the original branch if user cancels merge
+      if (originalBranch !== branchName) {
+        console.log(
+          chalk.dim(`Returning to original branch: ${originalBranch}`),
+        );
+        try {
+          execSync(`git checkout ${originalBranch}`, { stdio: "inherit" });
+        } catch (error) {
+          console.error(
+            chalk.red(
+              `Failed to return to original branch '${originalBranch}'`,
+            ),
+          );
+        }
+      }
+
+      // Return to the original directory before exiting
+      process.chdir(originalDir);
+      return;
+    }
+
+    // Switch back to main for the merge
+    console.log(chalk.dim(`Checking out main branch for merge...`));
+    execSync("git checkout main", { stdio: "inherit" });
+
+    try {
+      console.log(chalk.dim(`Merging ${branchName} into main...`));
+      execSync(`git merge ${branchName}`, { stdio: "inherit" });
+      console.log(chalk.green.bold(`✅ Merge successful!`));
+
+      // Ask if we should delete the branch
+      const { deleteBranch } = await inquirer.prompt<{ deleteBranch: boolean }>(
+        [
+          {
+            type: "confirm",
+            name: "deleteBranch",
+            message: `Delete ${branchName} branch now that it's been merged?`,
+            default: true,
+          },
+        ],
+      );
+
+      if (deleteBranch) {
+        console.log(chalk.dim(`Deleting ${branchName} branch...`));
+        deleteBranchIfExists(branchName);
+      }
+    } catch (error) {
+      console.error(
+        chalk.red(
+          `Merge failed. You might need to resolve conflicts manually.`,
+        ),
+      );
+      console.error(
+        chalk.dim(
+          `Remaining on main branch. Resolve conflicts and then run: git merge ${branchName}`,
+        ),
+      );
+
+      // Return to the original directory before exiting
+      process.chdir(originalDir);
+      process.exit(1);
+    }
+
+    // Return to original branch if it wasn't main or the sync branch (which might be deleted)
+    if (originalBranch !== "main" && originalBranch !== branchName) {
+      console.log(chalk.dim(`Returning to original branch: ${originalBranch}`));
+      try {
+        execSync(`git checkout ${originalBranch}`, { stdio: "inherit" });
+      } catch (error) {
+        console.error(
+          chalk.red(`Failed to return to original branch '${originalBranch}'`),
+        );
+      }
+    }
+
+    console.log(chalk.green.bold("\n✅ Sync completed successfully!"));
 
     // Return to the original directory at the end of the script
     process.chdir(originalDir);
