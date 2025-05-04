@@ -1,6 +1,25 @@
 # Repository Synchronization: Pull-Only Approach
 
-This document provides instructions for maintaining synchronization between a template repository and projects derived from it using a simple, reliable pull-only approach.
+## Quick Start: Using the Automated Tool
+
+After setting up bidirectional GitHub remote links (as described below), you can use the built-in sync tool for faster repository synchronization:
+
+```bash
+# Run the sync tool from the root directory
+pnpm sync-repos
+```
+
+This tool will prompt you for:
+
+- Which repository you are on (template or project)
+- The name of your remote repo - default template if you are on project, name of project if you're on template
+- The commit message
+
+**Important reminders:**
+
+- Always review changes before committing
+- Delete temporary branches after merging
+- Be careful when syncing config files that might contain environment-specific settings
 
 ## Repository Terminology
 
