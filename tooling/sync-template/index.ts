@@ -244,7 +244,8 @@ async function main() {
 
     // Step 8: Show diff and confirm
     console.log(chalk.blue(`\nStep 5: Showing changes (git diff --staged)...`));
-    execSync("git diff --staged", { stdio: "inherit" });
+    // Use --no-pager to prevent git from using a pager that requires 'q' to exit
+    execSync("git --no-pager diff --staged", { stdio: "inherit" });
 
     const { confirmChanges } = await inquirer.prompt<{
       confirmChanges: boolean;
@@ -326,7 +327,8 @@ async function main() {
 
     try {
       console.log(chalk.dim(`Merging ${branchName} into main...`));
-      execSync(`git merge ${branchName}`, { stdio: "inherit" });
+      // Use --no-pager to prevent git from using a pager for merge output
+      execSync(`git --no-pager merge ${branchName}`, { stdio: "inherit" });
       console.log(chalk.green.bold(`✅ Merge successful!`));
 
       // Ask if we should delete the branch
