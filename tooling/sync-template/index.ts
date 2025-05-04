@@ -25,7 +25,7 @@ const repoRoot = path.join(__dirname, "../..");
 const program = new Command();
 
 program
-  .name("repo-sync")
+  .name("sync-template")
   .description("Synchronize files between template and project repositories")
   .version("0.1.0");
 
