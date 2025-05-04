@@ -5,8 +5,7 @@ import {
   SignUpButton,
   UserButton,
 } from "@clerk/nextjs";
-
-import { Button } from "@acme/ui/button";
+import { Button } from "@sassy/ui/button";
 
 export function AuthShowcase() {
   return (

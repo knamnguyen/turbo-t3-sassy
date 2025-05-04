@@ -1,5 +1,5 @@
 {
-  "name": "@acme/nextjs",
+  "name": "@sassy/nextjs",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,11 +14,11 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@acme/api": "workspace:*",
-    "@acme/db": "workspace:*",
-    "@acme/stripe": "workspace:*",
-    "@acme/ui": "workspace:*",
-    "@acme/validators": "workspace:*",
+    "@sassy/api": "workspace:*",
+    "@sassy/db": "workspace:*",
+    "@sassy/stripe": "workspace:*",
+    "@sassy/ui": "workspace:*",
+    "@sassy/validators": "workspace:*",
     "@clerk/nextjs": "^6.12.5",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "catalog:",
@@ -34,10 +34,10 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tailwind-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@sassy/eslint-config": "workspace:*",
+    "@sassy/prettier-config": "workspace:*",
+    "@sassy/tailwind-config": "workspace:*",
+    "@sassy/tsconfig": "workspace:*",
     "@prisma/nextjs-monorepo-workaround-plugin": "^6.5.0",
     "@types/node": "^22.10.10",
     "@types/react": "catalog:react19",
@@ -49,5 +49,5 @@
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@sassy/prettier-config"
 }

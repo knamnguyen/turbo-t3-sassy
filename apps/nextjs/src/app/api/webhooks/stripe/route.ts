@@ -1,9 +1,8 @@
 // apps/nextjs/src/app/api/webhooks/stripe/route.ts
+import type { WebhookResult } from "@sassy/stripe";
 import { NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
-
-import type { WebhookResult } from "@acme/stripe";
-import { StripeService } from "@acme/stripe";
+import { StripeService } from "@sassy/stripe";
 
 import { env } from "~/env";
 import { metadata } from "../../../layout";

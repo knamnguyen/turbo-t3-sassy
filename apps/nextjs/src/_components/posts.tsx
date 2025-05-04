@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-
-import type { RouterOutputs } from "@acme/api";
-import { CreatePostSchema } from "@acme/db";
-import { cn } from "@acme/ui";
-import { Button } from "@acme/ui/button";
+import type { RouterOutputs } from "@sassy/api";
+import { CreatePostSchema } from "@sassy/db";
+import { cn } from "@sassy/ui";
+import { Button } from "@sassy/ui/button";
 import {
   Form,
   FormControl,
@@ -17,9 +11,14 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@acme/ui/form";
-import { Input } from "@acme/ui/input";
-import { toast } from "@acme/ui/toast";
+} from "@sassy/ui/form";
+import { Input } from "@sassy/ui/input";
+import { toast } from "@sassy/ui/toast";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 
 import { useTRPC } from "~/trpc/react";
 

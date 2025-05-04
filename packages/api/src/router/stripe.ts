@@ -3,9 +3,9 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import type { ExportableStripePayment, Prisma } from "@acme/db";
-import { StripePaymentSchema } from "@acme/db";
-import { StripeService } from "@acme/stripe";
+import type { ExportableStripePayment, Prisma } from "@sassy/db";
+import { StripePaymentSchema } from "@sassy/db";
+import { StripeService } from "@sassy/stripe";
 
 import { protectedProcedure } from "../trpc";
 

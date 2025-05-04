@@ -1,5 +1,5 @@
 {
-  "name": "turbo-t3-sassy",
+  "name": "sassy",
   "private": true,
   "engines": {
     "node": ">=22.11.0",
@@ -10,11 +10,11 @@
     "build": "turbo run build",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo run clean",
-    "db:push": "pnpm --filter @acme/db db:push",
-    "db:studio": "pnpm --filter @acme/db db:studio",
-    "db:generate": "pnpm --filter @acme/db db:generate",
+    "db:push": "pnpm --filter @sassy/db db:push",
+    "db:studio": "pnpm --filter @sassy/db db:studio",
+    "db:generate": "pnpm --filter @sassy/db db:generate",
     "dev": "turbo watch dev --continue",
-    "dev:next": "turbo watch dev -F @acme/nextjs...",
+    "dev:next": "turbo watch dev -F @sassy/nextjs...",
     "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
     "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
@@ -22,16 +22,17 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws && pnpm db:generate && mkdir -p apps/nextjs/.next/server && cp packages/db/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node apps/nextjs/.next/server/",
     "typecheck": "turbo run typecheck",
-    "ui-add": "turbo run ui-add"
+    "ui-add": "turbo run ui-add",
+    "sync-repos": "pnpm --filter @sassy/repo-sync start"
   },
   "devDependencies": {
-    "@acme/prettier-config": "workspace:*",
+    "@sassy/prettier-config": "workspace:*",
     "@turbo/gen": "^2.3.4",
     "prettier": "catalog:",
     "turbo": "^2.3.4",
     "typescript": "catalog:"
   },
-  "prettier": "@acme/prettier-config",
+  "prettier": "@sassy/prettier-config",
   "dependencies": {
     "stripe": "^13.9.0"
   }

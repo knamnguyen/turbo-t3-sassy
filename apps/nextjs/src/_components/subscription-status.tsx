@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
-
-import { SubscriptionPlanModal } from "@acme/ui";
+import { SubscriptionPlanModal } from "@sassy/ui";
 
 import { useSubscription } from "~/hooks/use-subscription";
 import { ManageSubscriptionButton } from "./manage-subscription-button";

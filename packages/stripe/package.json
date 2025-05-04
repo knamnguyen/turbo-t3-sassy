@@ -1,5 +1,5 @@
 {
-  "name": "@acme/stripe",
+  "name": "@sassy/stripe",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -20,18 +20,18 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@acme/db": "workspace:*",
+    "@sassy/db": "workspace:*",
     "stripe": "^13.9.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@sassy/eslint-config": "workspace:*",
+    "@sassy/prettier-config": "workspace:*",
+    "@sassy/tsconfig": "workspace:*",
     "dotenv-cli": "^8.0.0",
     "eslint": "catalog:",
     "tsx": "^4.19.3",
     "typescript": "catalog:"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@sassy/prettier-config"
 }

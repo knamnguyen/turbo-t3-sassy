@@ -6,7 +6,7 @@ This document provides instructions for maintaining synchronization between a te
 
 For clarity, let's define the repositories:
 
-- **Template repository**: The base repository (e.g., `turbo-t3-sassy`) that contains the common structure and code
+- **Template repository**: The base repository (e.g., `sassy`) that contains the common structure and code
 - **Project repository**: Your specific application (e.g., `founderlog`) derived from the template
 
 ## Initial Repository Setup
@@ -17,7 +17,7 @@ Before you can sync between repositories, you need to set up the appropriate git
 
 ```bash
 # Clone the template for a new project
-git clone https://github.com/knamnguyen/turbo-t3-sassy.git founderlog
+git clone https://github.com/knamnguyen/sassy.git founderlog
 
 # Change directory to the project
 cd founderlog
@@ -37,22 +37,22 @@ git remote add origin https://github.com/knamnguyen/founderlog.git
 git push -u origin main
 
 # Add the template as another remote for future synchronization
-git remote add template https://github.com/knamnguyen/turbo-t3-sassy.git
+git remote add template https://github.com/knamnguyen/sassy.git
 
 # Check your remotes
 git remote -v
 # Should show:
 # origin    https://github.com/knamnguyen/founderlog.git (fetch)
 # origin    https://github.com/knamnguyen/founderlog.git (push)
-# template  https://github.com/knamnguyen/turbo-t3-sassy.git (fetch)
-# template  https://github.com/knamnguyen/turbo-t3-sassy.git (push)
+# template  https://github.com/knamnguyen/sassy.git (fetch)
+# template  https://github.com/knamnguyen/sassy.git (push)
 ```
 
 ### 2. Setting Up the Template Repository for Syncing
 
 ```bash
 # Navigate to your template repository directory
-cd /path/to/turbo-t3-sassy
+cd /path/to/sassy
 
 # Add the project repository as a remote named after your project
 git remote add founderlog https://github.com/knamnguyen/founderlog.git
@@ -60,8 +60,8 @@ git remote add founderlog https://github.com/knamnguyen/founderlog.git
 # Check your remotes
 git remote -v
 # Should show:
-# origin     https://github.com/knamnguyen/turbo-t3-sassy.git (fetch)
-# origin     https://github.com/knamnguyen/turbo-t3-sassy.git (push)
+# origin     https://github.com/knamnguyen/sassy.git (fetch)
+# origin     https://github.com/knamnguyen/sassy.git (push)
 # founderlog https://github.com/knamnguyen/founderlog.git (fetch)
 # founderlog https://github.com/knamnguyen/founderlog.git (push)
 ```

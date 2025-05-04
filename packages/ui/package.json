@@ -1,5 +1,5 @@
 {
-  "name": "@acme/ui",
+  "name": "@sassy/ui",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -33,10 +33,10 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tailwind-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@sassy/eslint-config": "workspace:*",
+    "@sassy/prettier-config": "workspace:*",
+    "@sassy/tailwind-config": "workspace:*",
+    "@sassy/tsconfig": "workspace:*",
     "@types/react": "catalog:react19",
     "eslint": "catalog:",
     "prettier": "catalog:",
@@ -48,5 +48,5 @@
     "react": "catalog:react19",
     "zod": "catalog:"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@sassy/prettier-config"
 }

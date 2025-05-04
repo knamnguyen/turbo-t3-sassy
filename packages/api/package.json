@@ -1,5 +1,5 @@
 {
-  "name": "@acme/api",
+  "name": "@sassy/api",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,21 +19,21 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@acme/db": "workspace:*",
-    "@acme/stripe": "workspace:*",
-    "@acme/validators": "workspace:*",
+    "@sassy/db": "workspace:*",
+    "@sassy/stripe": "workspace:*",
+    "@sassy/validators": "workspace:*",
     "@clerk/nextjs": "^6.12.5",
     "@trpc/server": "catalog:",
     "superjson": "2.2.2",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@sassy/eslint-config": "workspace:*",
+    "@sassy/prettier-config": "workspace:*",
+    "@sassy/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@sassy/prettier-config"
 }
