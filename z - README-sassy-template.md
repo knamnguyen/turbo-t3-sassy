@@ -67,6 +67,7 @@ git remote -v
 ```
 
 Now you have bidirectional remotes set up:
+
 - In your project repo: `template` points to your template repository
 - In your template repo: `founderlog` (or your project name) points to your project repository
 
@@ -81,6 +82,7 @@ The pull-only approach is **strongly recommended** for solo developers and small
 - **Enhances safety**: Minimizes risk of accidentally overwriting important changes
 
 The core principle is simple:
+
 1. Set up remotes in both repositories (as shown above)
 2. Never push directly between repositories
 3. Always pull specific files/folders you want to sync from the source repository
@@ -116,9 +118,10 @@ git diff --staged  # Shows differences between staged changes and HEAD
 git add .
 git commit -m "Sync stripe package and custom routers from project"
 
-# Merge to main
+# Merge (extra comment test) to main
 git checkout main
-git merge update-from-project  # Conflict resolution happens here if needed
+# Conflict resolution happens here if needed in the visual ide editor
+git merge update-from-project
 
 # Clean up the temporary branch
 git branch -d update-from-project
@@ -150,7 +153,8 @@ git commit -m "Sync UI and validators from template"
 
 # Merge to main
 git checkout main
-git merge update-from-template  # Conflict resolution happens here if needed
+# Conflict resolution happens here if needed in the visual ide editor
+git merge update-from-template
 
 # Clean up the temporary branch
 git branch -d update-from-template
@@ -178,7 +182,7 @@ Starting state:            Remote state:
         │                         │
         ▼                         │
 ┌───────────────────────────────────────────┐
-│ STEP 1: git checkout remote/branch -- File A  
+│ STEP 1: git checkout remote/branch -- File A
 │                                           │
 │ File A (v1) is REPLACED with File A (v2)  │
 │ No merge happens during this step!        │
@@ -301,6 +305,7 @@ Most modern IDEs provide excellent visual merge tools that allow you to:
 - Resolve conflicts file by file
 
 The typical IDE merge view has:
+
 - Your current version (usually on the left)
 - The incoming template changes (usually on the right)
 - The result you're creating (center/bottom)
@@ -335,4 +340,3 @@ git merge update-from-template
 git branch -d update-from-template
 git branch -d temp-remote
 ```
-
