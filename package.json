@@ -23,7 +23,7 @@
     "postinstall": "pnpm lint:ws && pnpm db:generate && mkdir -p apps/nextjs/.next/server && cp packages/db/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node apps/nextjs/.next/server/",
     "typecheck": "turbo run typecheck",
     "ui-add": "turbo run ui-add",
-    "sync-sassy": "pnpm --filter @sassy/sync-template start"
+    "sync-template": "pnpm --filter @sassy/sync-template start"
   },
   "devDependencies": {
     "@sassy/prettier-config": "workspace:*",
