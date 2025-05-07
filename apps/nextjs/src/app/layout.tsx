@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { cn } from "@sassy/ui";
-import { ThemeProvider, ThemeToggle } from "@sassy/ui/theme";
-import { Toaster } from "@sassy/ui/toast";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+
+import { ThemeProvider, ThemeToggle } from "@sassy/ui/theme";
+import { Toaster } from "@sassy/ui/toast";
+import { cn } from "@sassy/ui/utils";
 
 import { TRPCReactProvider } from "~/trpc/react";
 

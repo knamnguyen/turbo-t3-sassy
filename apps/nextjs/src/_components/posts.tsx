@@ -1,8 +1,13 @@
 "use client";
 
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+
 import type { RouterOutputs } from "@sassy/api";
 import { CreatePostSchema } from "@sassy/db";
-import { cn } from "@sassy/ui";
 import { Button } from "@sassy/ui/button";
 import {
   Form,
@@ -14,11 +19,7 @@ import {
 } from "@sassy/ui/form";
 import { Input } from "@sassy/ui/input";
 import { toast } from "@sassy/ui/toast";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { cn } from "@sassy/ui/utils";
 
 import { useTRPC } from "~/trpc/react";
 
@@ -83,7 +84,7 @@ export function CreatePostForm() {
             </FormItem>
           )}
         />
-        <Button>Create</Button>
+        <Button variant="primary">Create</Button>
       </form>
     </Form>
   );
