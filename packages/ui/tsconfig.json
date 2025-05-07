@@ -3,7 +3,12 @@
   "compilerOptions": {
     "lib": ["ES2022", "dom", "dom.iterable"],
     "jsx": "preserve",
-    "rootDir": "."
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      // temporary fix for the utils import from adding shadcn components defaults
+      "src/lib/utils": ["src/utils"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules"]

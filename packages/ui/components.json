@@ -10,8 +10,9 @@
     "cssVariables": true
   },
   "aliases": {
-    "utils": "@sassy/ui",
-    "components": "src/",
-    "ui": "src/"
+    "utils": "src/utils",
+    "components": "src/components",
+    "ui": "src/ui",
+    "hooks": "src/hooks"
   }
 }

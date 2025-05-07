@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../dialog";
+} from "@sassy/ui/dialog";
 
 interface SubscriptionPlanModalProps {
   trigger: React.ReactNode;
