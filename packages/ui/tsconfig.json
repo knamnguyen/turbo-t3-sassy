@@ -2,12 +2,13 @@
   "extends": "@sassy/tsconfig/internal-package.json",
   "compilerOptions": {
     "lib": ["ES2022", "dom", "dom.iterable"],
+    //preserve jsx because this is a jit package, consuming app will build it later into javascript
     "jsx": "preserve",
-    "rootDir": ".",
-    "baseUrl": ".",
+    //info for the consuming app to know where to find the source code when building
+    "rootDir": "./src",
+    //note that paths don't work here, they are handled in the consuming app's tsconfig
     "paths": {
-      // temporary fix for the utils import from adding shadcn components defaults
-      "src/lib/utils": ["src/utils"]
+      "@sassy/ui/*": ["./src/*"]
     }
   },
   "include": ["src"],

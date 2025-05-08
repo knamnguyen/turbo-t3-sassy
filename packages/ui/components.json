@@ -10,9 +10,12 @@
     "cssVariables": true
   },
   "aliases": {
-    "utils": "src/utils",
-    "components": "src/components",
-    "ui": "src/ui",
-    "hooks": "src/hooks"
+    "utils": "@sassy/ui/utils",
+    "__cmt2": " //info shadcn is not smart enough to pick up turbo repo package aliases",
+    "__cmt3": "//info we need to specify the path manually to place adding components in correct place",
+    "__cmt1": "//info this is the default shadcn alias for utils when adding a new component",
+    "components": "@sassy/ui/components",
+    "ui": "@sassy/ui/ui",
+    "hooks": "@sassy/ui/hooks"
   }
 }
