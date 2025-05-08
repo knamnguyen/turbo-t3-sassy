@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "exports": {
-    "./utils": "./src/utils.ts",
     "./*": "./src/ui/*.tsx",
+    "./utils": "./src/utils.ts",
     "./components/*": "./src/components/*.tsx",
     "./hooks/*": "./src/hooks/*.tsx",
     "./theme": "./src/ui/theme.tsx"

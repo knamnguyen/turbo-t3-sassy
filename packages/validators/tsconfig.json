@@ -1,5 +1,18 @@
 {
   "extends": "@sassy/tsconfig/internal-package.json",
   "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "lib": ["ES2022", "dom", "dom.iterable"],
+    //preserve jsx because this is a jit package, consuming app will build it later into javascript
+    "jsx": "preserve",
+    //info for the consuming app to know where to find the source code when building
+    "rootDir": "./src",
+    //note that paths don't work here, they are handled in the consuming app's tsconfig
+    // looks like paths for package aliases still work and is required for JIT package
+    // since the consuming app's tsconfig won't have to pick up the aliases, they can just use the package name, which match perfectly with the export entry point in package.json
+    "paths": {
+      "@sassy/validators/*": ["./src/*"]
+    }
+  }
 }
