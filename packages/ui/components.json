@@ -13,7 +13,6 @@
     "__cmt1": "//info in turbo monorepo, shadcn needs to specify the workspace alias with locations",
     "__cmt2": " //info setting just src/lib/utils for example will cause error in deployment",
     "__cmt3": "//info in tsconfig, must set path as the package alias as well",
-
     "utils": "@sassy/ui/utils",
     "components": "@sassy/ui/components",
     "ui": "@sassy/ui/ui",
